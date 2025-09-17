@@ -4,7 +4,7 @@ import IzListingTable from "./Table/ListingTable";
 import { useState } from "react";
 
 const Report = ({ data, config, criteria, onCriteriaChange }) => {
-  const CustomHeader = config.headerConfig.component;
+  const CustomHeader = config?.headerConfig?.component;
 
   const [selected, setSelected] = useState({
     dimensions: criteria.dimensions || [],
@@ -50,6 +50,7 @@ const Report = ({ data, config, criteria, onCriteriaChange }) => {
           onCriteriaChange={onCriteriaChange}
         />
       ) : (
+      <Stack alignItems="flex-end">
         <Config
           config={config}
           criteria={criteria}
@@ -57,6 +58,7 @@ const Report = ({ data, config, criteria, onCriteriaChange }) => {
           selected={selected}
           setSelected={setSelected}
         />
+      </Stack>
       )}
 
       <IzListingTable
