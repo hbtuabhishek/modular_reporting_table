@@ -13,9 +13,7 @@ const Report = ({ data, config, criteria, onCriteriaChange }) => {
   });
 
   const handleTableFilter = (filterUpdates) => {
-    const updatedCriteria = {
-      ...criteria,
-    };
+    const updatedCriteria = { ...criteria };
 
     if (filterUpdates.pageSize || filterUpdates.pageIndex) {
       updatedCriteria.pagination = {
@@ -34,7 +32,10 @@ const Report = ({ data, config, criteria, onCriteriaChange }) => {
     onCriteriaChange(updatedCriteria);
   };
 
-  const allowedColumns = [...selected.dimensions, ...selected.metrics];
+  const allowedColumns = CustomHeader
+    ? config.columnConfig.map((col) => col.id)
+    : [...selected.dimensions, ...selected.metrics];
+
   const tableColumns = config.columnConfig.filter((col) =>
     allowedColumns.includes(col.id)
   );

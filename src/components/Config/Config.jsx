@@ -14,11 +14,13 @@ import {
   Paper,
   TextField,
   Box,
+  Card,
 } from "@mui/material";
 import DateRangePicker from "../DateRangePicker/DateRangePicker";
 
 const Config = ({ config, criteria, onCriteriaChange, setSelected, selected }) => {
   const [openCategory, setOpenCategory] = useState(null);
+  const [search, setSearch] = useState("");
 
   const handleToggle = (category, item) => {
     if (category === "filters") {
@@ -71,6 +73,7 @@ const Config = ({ config, criteria, onCriteriaChange, setSelected, selected }) =
       ...selected,
     });
     setOpenCategory(null);
+    setSearch("");
   };
 
   const renderSelectedChips = (category, items) => {
@@ -107,9 +110,14 @@ const Config = ({ config, criteria, onCriteriaChange, setSelected, selected }) =
   };
 
   const renderFilterInputs = (items) => {
-    return Object.keys(selected.filters).map((filterId) => {
-      const item = items.find((f) => f.id === filterId);
-      if (!item) return null;
+    return Object.keys(selected.filters)
+      .map((filterId) => {
+        const item = items.find((f) => f.id === filterId);
+        if (!item) return null;
+
+        if (search && !item.label.toLowerCase().includes(search.toLowerCase())) {
+          return null;
+        }
 
       if (item.type === "textInput") {
         return (
@@ -158,7 +166,8 @@ const Config = ({ config, criteria, onCriteriaChange, setSelected, selected }) =
       }
 
       return null;
-    });
+    })
+    .filter(Boolean);
   };
 
   const renderList = (category, items) => (
@@ -168,6 +177,9 @@ const Config = ({ config, criteria, onCriteriaChange, setSelected, selected }) =
           category === "filters"
             ? !Object.prototype.hasOwnProperty.call(selected.filters, item.id)
             : true
+        )
+        .filter((item) =>
+          search ? item.label.toLowerCase().includes(search.toLowerCase()) : true
         )
         .map((item) => {
           const checked =
@@ -213,7 +225,15 @@ const Config = ({ config, criteria, onCriteriaChange, setSelected, selected }) =
       >
         <DialogTitle>Select {openCategory}</DialogTitle>
         <DialogContent>
-          <Paper sx={{ p: 2, mb: 3 }}>
+          <TextField
+            fullWidth
+            placeholder="Search..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            size="small"
+            sx={{ mb: 2 }}
+          />
+          <Card sx={{ p: 2, mb: 3 }}>
             <Stack direction="row" flexWrap="wrap" gap={1}>
               {openCategory &&
                 renderSelectedChips(
@@ -221,7 +241,7 @@ const Config = ({ config, criteria, onCriteriaChange, setSelected, selected }) =
                   config.criteriaView[openCategory]
                 )}
             </Stack>
-          </Paper>
+          </Card>
 
           {openCategory === "filters" && (
             <Box sx={{ mb: 3 }}>
