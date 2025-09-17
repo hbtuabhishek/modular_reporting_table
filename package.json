@@ -1,0 +1,67 @@
+{
+  "name": "dynamic-report-listing",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A reusable React component for dynamic report listing.",
+  "main": "dist/dynamic-report-listing.umd.js",
+  "module": "dist/dynamic-report-listing.es.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/dynamic-report-listing.es.js",
+      "require": "./dist/dynamic-report-listing.umd.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "react",
+    "component",
+    "vite",
+    "report",
+    "listing"
+  ],
+  "peerDependencies": {
+    "@emotion/react": "^11.0.0",
+    "@emotion/styled": "^11.0.0",
+    "@mui/material": "^5.0.0 || ^6.0.0 || ^7.0.0",
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "dependencies": {
+    "@mui/icons-material": "^5.14.19",
+    "date-fns": "^2.30.0",
+    "daterangepicker": "^3.1.0",
+    "mui-daterange-picker": "^1.0.5",
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@emotion/cache": "^11.14.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@eslint/js": "^9.33.0",
+    "@mui/material": "^5.14.19",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^5.0.0",
+    "eslint": "^9.33.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^16.3.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.6.3",
+    "vite": "^7.1.2",
+    "vite-plugin-dts": "^4.3.0"
+  }
+}
