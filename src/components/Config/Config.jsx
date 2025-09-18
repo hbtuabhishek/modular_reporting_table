@@ -24,6 +24,27 @@ const Config = ({ config, criteria, onCriteriaChange, setSelected, selected }) =
   const [openCategory, setOpenCategory] = useState(null);
   const [search, setSearch] = useState("");
 
+  const chipConfigs = [
+    {
+      key: "dimensions",
+      label: "Dimensions",
+      count: selected.dimensions?.length || 0,
+      color: "primary",
+    },
+    {
+      key: "metrics",
+      label: "Metrics",
+      count: selected.metrics?.length || 0,
+      color: "secondary",
+    },
+    {
+      key: "filters",
+      label: "Filters",
+      count: Object.keys(selected.filters || {}).length,
+      color: "success",
+    },
+  ];
+
   const handleToggle = (category, item) => {
     if (category === "filters") {
       setSelected((prev) => {
@@ -208,40 +229,27 @@ const Config = ({ config, criteria, onCriteriaChange, setSelected, selected }) =
 
   return (
     <Stack direction="row" spacing={2}>
-    <Badge
-      badgeContent={selected.dimensions?.length || 0}
-      color="primary"
-    >
-      <Chip
-        label="Dimensions"
-        onClick={() => setOpenCategory("dimensions")}
-        color="primary"
-        sx={{ borderRadius : "8px"}}
-      />
-    </Badge>
-    <Badge
-      badgeContent={selected.metrics?.length || 0}
-      color="secondary"
-    >
-      <Chip
-        label="Metrics"
-        onClick={() => setOpenCategory("metrics")}
-        color="secondary"
-        sx={{ borderRadius : "8px"}}
-      />
-    </Badge>
-    <Badge
-      badgeContent={Object.keys(selected.filters || {}).length}
-      color="success"
-    >
-      <Chip
-        label="Filters"
-        onClick={() => setOpenCategory("filters")}
-        color="success"
-      sx={{ borderRadius : "8px"}}
-      />
-    </Badge>
-
+    {chipConfigs.map(({ key, label, count, color }) => (
+      <Badge
+        key={key}
+        badgeContent={count}
+        color={color}
+        sx={{ "& .MuiBadge-badge": { right: 4, top: 4 } }}
+      >
+        <Chip
+          label={label}
+          onClick={() => setOpenCategory(key)}
+          color={color}
+          sx={{
+            px: 1,
+            py: 1,
+            height: 35,
+            fontSize: "0.875rem",
+            fontWeight: 600,
+          }}
+        />
+      </Badge>
+    ))}
       <Dialog
         open={Boolean(openCategory)}
         onClose={() => setOpenCategory(null)}

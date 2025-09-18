@@ -51,18 +51,13 @@ const Report = ({ data, config, criteria, onCriteriaChange, exportData, onExport
         config={config}
         criteria={criteria}
         onCriteriaChange={onCriteriaChange}
-        RenderCsvButton={() =>
-          config?.csvConfig && (
-            <IzDownloadCsv
-              data={exportData}
-              headers={config.csvConfig.headers}
-              filename={config.csvConfig.filename}
-              fetchData={onExport}
-              config={config}
-            />
-          )
-        }
       />
+        {config?.csvConfig && (
+        <IzDownloadCsv data={exportData} 
+          headers={config.csvConfig.headers} 
+          filename={config.csvConfig.filename}
+          fetchData={onExport}
+        />)}
         </Stack>
       ) : (
       <Stack direction="row" spacing={2} justifyContent="flex-end">
@@ -73,7 +68,8 @@ const Report = ({ data, config, criteria, onCriteriaChange, exportData, onExport
           selected={selected}
           setSelected={setSelected}
         />
-        <IzDownloadCsv data={exportData} headers={config.csvConfig.headers} 
+        <IzDownloadCsv data={exportData} 
+          headers={config.csvConfig.headers} 
           filename={config.csvConfig.filename}
           fetchData={onExport}
         />
