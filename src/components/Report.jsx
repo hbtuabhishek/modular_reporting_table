@@ -2,8 +2,9 @@ import { Stack } from "@mui/material";
 import Config from "./Config/Config";
 import IzListingTable from "./Table/ListingTable";
 import { useState } from "react";
+import IzDownloadCsv from "./IzDownloadCsv";
 
-const Report = ({ data, config, criteria, onCriteriaChange }) => {
+const Report = ({ data, config, criteria, onCriteriaChange, exportData, onExport }) => {
   const CustomHeader = config?.headerConfig?.component;
 
   const [selected, setSelected] = useState({
@@ -45,19 +46,31 @@ const Report = ({ data, config, criteria, onCriteriaChange }) => {
   return (
     <Stack spacing={2}>
       {CustomHeader ? (
+        <Stack direction={{ xs:"column", sm:"row"}} alignContent='center' justifyContent='space-between' mb={2} spacing={2}>
         <CustomHeader
           config={config}
           criteria={criteria}
           onCriteriaChange={onCriteriaChange}
         />
+        {config?.csvConfig &&
+        <IzDownloadCsv data={exportData} headers={config.csvConfig.headers} 
+          filename={config.csvConfig.filename}
+          fetchData={onExport}
+          config={config}
+        />}
+        </Stack>
       ) : (
-      <Stack alignItems="flex-end">
+      <Stack direction="row" spacing={2} justifyContent="flex-end">
         <Config
           config={config}
           criteria={criteria}
           onCriteriaChange={onCriteriaChange}
           selected={selected}
           setSelected={setSelected}
+        />
+        <IzDownloadCsv data={exportData} headers={config.csvConfig.headers} 
+          filename={config.csvConfig.filename}
+          fetchData={onExport}
         />
       </Stack>
       )}
@@ -75,4 +88,3 @@ const Report = ({ data, config, criteria, onCriteriaChange }) => {
 };
 
 export default Report;
-

@@ -15,6 +15,8 @@ import {
   TextField,
   Box,
   Card,
+  Badge,
+  Typography,
 } from "@mui/material";
 import DateRangePicker from "../DateRangePicker/DateRangePicker";
 
@@ -121,6 +123,8 @@ const Config = ({ config, criteria, onCriteriaChange, setSelected, selected }) =
 
       if (item.type === "textInput") {
         return (
+          <Stack spacing={1} mb={2}>
+          <Typography variant="body2">Search: </Typography>
           <TextField
             key={item.id}
             label={item.label}
@@ -138,12 +142,14 @@ const Config = ({ config, criteria, onCriteriaChange, setSelected, selected }) =
             fullWidth
             sx={{ mb: 2 }}
           />
+          </Stack>
         );
       }
 
       if (item.type === "daterange") {
         return (
-          <Box key={item.id} sx={{ mb: 2 }}>
+            <Stack spacing={1}>
+            <Typography variant="body2">Date Range: </Typography>
             <DateRangePicker
               onChange={(validRange, label) =>
                 setSelected((prev) => ({
@@ -161,7 +167,7 @@ const Config = ({ config, criteria, onCriteriaChange, setSelected, selected }) =
               defaultRangeLabel={selected.filters[item.id]?.label || "All Time"}
               isDisabled={false}
             />
-          </Box>
+          </Stack>
         );
       }
 
@@ -202,21 +208,39 @@ const Config = ({ config, criteria, onCriteriaChange, setSelected, selected }) =
 
   return (
     <Stack direction="row" spacing={2}>
+    <Badge
+      badgeContent={selected.dimensions?.length || 0}
+      color="primary"
+    >
       <Chip
         label="Dimensions"
         onClick={() => setOpenCategory("dimensions")}
         color="primary"
+        sx={{ borderRadius : "8px"}}
       />
+    </Badge>
+    <Badge
+      badgeContent={selected.metrics?.length || 0}
+      color="secondary"
+    >
       <Chip
         label="Metrics"
         onClick={() => setOpenCategory("metrics")}
         color="secondary"
+        sx={{ borderRadius : "8px"}}
       />
+    </Badge>
+    <Badge
+      badgeContent={Object.keys(selected.filters || {}).length}
+      color="success"
+    >
       <Chip
         label="Filters"
         onClick={() => setOpenCategory("filters")}
         color="success"
+      sx={{ borderRadius : "8px"}}
       />
+    </Badge>
 
       <Dialog
         open={Boolean(openCategory)}
