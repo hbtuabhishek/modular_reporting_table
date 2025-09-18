@@ -46,18 +46,23 @@ const Report = ({ data, config, criteria, onCriteriaChange, exportData, onExport
   return (
     <Stack spacing={2}>
       {CustomHeader ? (
-        <Stack direction={{ xs:"column", sm:"row"}} alignContent='center' justifyContent='space-between' mb={2} spacing={2}>
-        <CustomHeader
-          config={config}
-          criteria={criteria}
-          onCriteriaChange={onCriteriaChange}
-        />
-        {config?.csvConfig &&
-        <IzDownloadCsv data={exportData} headers={config.csvConfig.headers} 
-          filename={config.csvConfig.filename}
-          fetchData={onExport}
-          config={config}
-        />}
+        <Stack direction={{ xs:"column", sm:"row"}} alignContent='center' mb={2}>
+      <CustomHeader
+        config={config}
+        criteria={criteria}
+        onCriteriaChange={onCriteriaChange}
+        RenderCsvButton={() =>
+          config?.csvConfig && (
+            <IzDownloadCsv
+              data={exportData}
+              headers={config.csvConfig.headers}
+              filename={config.csvConfig.filename}
+              fetchData={onExport}
+              config={config}
+            />
+          )
+        }
+      />
         </Stack>
       ) : (
       <Stack direction="row" spacing={2} justifyContent="flex-end">
