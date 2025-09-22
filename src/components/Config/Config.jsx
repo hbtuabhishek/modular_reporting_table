@@ -11,14 +11,29 @@ import {
   ListItemText,
   Checkbox,
   Stack,
-  Paper,
   TextField,
   Box,
   Card,
   Badge,
   Typography,
+  Grow,
+  IconButton
 } from "@mui/material";
 import DateRangePicker from "../DateRangePicker/DateRangePicker";
+import { Analytics, BarChart, Clear, FilterList, Search, ViewColumn } from "@mui/icons-material";
+
+const getCategoryIcon = (category) => {
+  switch (category) {
+    case "dimensions":
+      return <ViewColumn />;
+    case "metrics":
+      return <BarChart />;
+    case "filters":
+      return <FilterList />;
+    default:
+      return <Analytics />;
+  }
+};
 
 const Config = ({ config, criteria, onCriteriaChange, setSelected, selected }) => {
   const [openCategory, setOpenCategory] = useState(null);
@@ -145,10 +160,10 @@ const Config = ({ config, criteria, onCriteriaChange, setSelected, selected }) =
       if (item.type === "textInput") {
         return (
           <Stack spacing={1} mb={2}>
-          <Typography variant="body2">Search: </Typography>
+          <Typography variant="body2">{item.label || ""}: </Typography>
           <TextField
+            placeholder="Enter Value"
             key={item.id}
-            label={item.label}
             value={selected.filters[item.id] || ""}
             onChange={(e) =>
               setSelected((prev) => ({
@@ -162,6 +177,9 @@ const Config = ({ config, criteria, onCriteriaChange, setSelected, selected }) =
             size="small"
             fullWidth
             sx={{ mb: 2 }}
+            InputProps={{
+              startAdornment: item.id == "search" && <Search fontSize="small" sx={{ mr: 1 }} />,
+            }}
           />
           </Stack>
         );
@@ -170,7 +188,7 @@ const Config = ({ config, criteria, onCriteriaChange, setSelected, selected }) =
       if (item.type === "daterange") {
         return (
             <Stack spacing={1}>
-            <Typography variant="body2">Date Range: </Typography>
+            <Typography variant="body2">{item.label || ""}: </Typography>
             <DateRangePicker
               onChange={(validRange, label) =>
                 setSelected((prev) => ({
@@ -218,7 +236,7 @@ const Config = ({ config, criteria, onCriteriaChange, setSelected, selected }) =
             <ListItem
               key={item.value || item.id}
               onClick={() => handleToggle(category, item)}
-              sx={{ padding : "0px"}}
+              sx={{ p : "0px"}}
             >
               <Checkbox checked={checked} size="small"/>
               <ListItemText primary={item.label} primaryTypographyProps={{
@@ -240,13 +258,14 @@ const Config = ({ config, criteria, onCriteriaChange, setSelected, selected }) =
         sx={{ "& .MuiBadge-badge": { right: 4, top: 4 } }}
       >
         <Chip
+          icon={getCategoryIcon(key)}
           label={label}
           onClick={() => setOpenCategory(key)}
           color={color}
           sx={{
             px: 1,
             py: 1,
-            height: 35,
+            height: 40,
             fontSize: "0.875rem",
             fontWeight: 600,
           }}
@@ -257,38 +276,70 @@ const Config = ({ config, criteria, onCriteriaChange, setSelected, selected }) =
         open={Boolean(openCategory)}
         onClose={() => setOpenCategory(null)}
         fullWidth
+        TransitionComponent={Grow}
       >
-        <DialogTitle>Select {openCategory}</DialogTitle>
-        <DialogContent dividers>
+        <DialogTitle>Select {openCategory}
           <TextField
             fullWidth
             placeholder="Search..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             size="small"
-            sx={{ mb: 2 }}
+            InputProps={{
+              startAdornment: <Search fontSize="small" sx={{ mr: 1 }} />,
+            }}
+            sx={{ mt: 2, mb: 2 }}
           />
-          <Card sx={{ p: 2, mb: 3 }}>
-            <Stack direction="row" flexWrap="wrap" gap={1}>
-              {openCategory &&
-                renderSelectedChips(
-                  openCategory,
-                  config.criteriaView[openCategory]
-                )}
-            </Stack>
-          </Card>
+            {openCategory && (
+              (Array.isArray(selected[openCategory])
+                ? selected[openCategory].length > 0
+                : Object.keys(selected[openCategory] || {}).length > 0) && (
+                <Card
+                  sx={{
+                    p: 2,
+                    bgcolor: "grey.50",
+                    borderRadius: "4px",
+                    position: "relative",
+                  }}
+                >
+                  <IconButton
+                    size="small"
+                    onClick={() =>
+                      setSelected((prev) => ({
+                        ...prev,
+                        [openCategory]: openCategory === "filters" ? {} : [],
+                      }))
+                    }
+                    sx={{
+                      position: "absolute",
+                      top: 3,
+                      right: 3,
+                    }}
+                  >
+                    <Clear fontSize="small" />
+                  </IconButton>
 
+                  <Stack direction="row" flexWrap="wrap" gap={1}>
+                    {renderSelectedChips(
+                      openCategory,
+                      config.criteriaView[openCategory]
+                    )}
+                  </Stack>
+                </Card>
+              )
+            )}
+            </DialogTitle>
+          <DialogContent>
           {openCategory === "filters" && (
             <Box sx={{ mb: 3 }}>
               {renderFilterInputs(config.criteriaView[openCategory])}
             </Box>
           )}
-
           {openCategory && renderList(openCategory, config.criteriaView[openCategory])}
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenCategory(null)}>Cancel</Button>
-          <Button onClick={handleApply} variant="contained">
+          <Button onClick={() => setOpenCategory(null)} sx={{ textTransform: "none" }}>Cancel</Button>
+          <Button onClick={handleApply} variant="contained" sx={{ textTransform: "none" }}>
             Apply
           </Button>
         </DialogActions>
