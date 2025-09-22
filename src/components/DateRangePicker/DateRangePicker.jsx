@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Popover from "@mui/material/Popover";
 import Button from "@mui/material/Button";
-import IzDateRangePickerInput from "./IzDateRangePickerInput"; // Assuming the path to IzDatePicker is correct
+import DateRangePickerInput from "./DateRangePickerInput";
 import { TextField, useMediaQuery, useTheme } from "@mui/material";
 import { CalendarMonth } from "@mui/icons-material";
 import { format } from 'date-fns';
@@ -67,7 +67,7 @@ export default function DateRangePicker({onChange, defaultRangeLabel,minDate,isD
         }}
         transitionDuration={0}
       >
-          <IzDateRangePickerInput onChange={handleDateRangeChange} onClose={handleClose} minDate={minDate} />
+          <DateRangePickerInput onChange={handleDateRangeChange} onClose={handleClose} minDate={minDate} />
       </Popover>
     </>
   );

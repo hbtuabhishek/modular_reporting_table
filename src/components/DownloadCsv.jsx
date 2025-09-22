@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Tooltip, Stack, Button } from '@mui/material';
 import { FileDownload } from '@mui/icons-material';
 
-const IzDownloadCsv = ({ data, filename, headers, isDisabled, fetchData, isDownloading, config }) => {
+const DownloadCsv = ({ data, filename, headers, isDisabled, fetchData, isDownloading, config }) => {
   const [shouldExport, setShouldExport] = useState(false);
 
   useEffect(() => {
@@ -64,4 +64,4 @@ const csvContent = "data:text/csv;charset=utf-8," +
   );
 };
 
-export default IzDownloadCsv;
+export default DownloadCsv;

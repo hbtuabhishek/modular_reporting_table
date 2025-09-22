@@ -2,15 +2,15 @@ import { Stack } from "@mui/material";
 import Config from "./Config/Config";
 import IzListingTable from "./Table/ListingTable";
 import { useState } from "react";
-import IzDownloadCsv from "./IzDownloadCsv";
+import DownloadCsv from "./DownloadCsv";
 
-const Report = ({ data, config, criteria, onCriteriaChange, exportData, onExport }) => {
+const Report = ({ data, config, criteria, onCriteriaChange, exportData, onExport, loading }) => {
   const CustomHeader = config?.headerConfig?.component;
 
   const [selected, setSelected] = useState({
-    dimensions: criteria.dimensions || [],
-    metrics: criteria.metrics || [],
-    filters: criteria.filters || {},
+    dimensions: criteria?.dimensions || [],
+    metrics: criteria?.metrics || [],
+    filters: criteria?.filters || {},
   });
 
   const handleTableFilter = (filterUpdates) => {
@@ -35,7 +35,7 @@ const Report = ({ data, config, criteria, onCriteriaChange, exportData, onExport
 
   const allowedColumns = CustomHeader
     ? config.columnConfig.map((col) => col.id)
-    : [...selected.dimensions, ...selected.metrics];
+    : [...criteria.dimensions, ...criteria.metrics];
 
   const tableColumns = config.columnConfig.filter((col) =>
     allowedColumns.includes(col.id)
@@ -53,7 +53,7 @@ const Report = ({ data, config, criteria, onCriteriaChange, exportData, onExport
         onCriteriaChange={onCriteriaChange}
       />
         {config?.csvConfig && (
-        <IzDownloadCsv data={exportData} 
+        <DownloadCsv data={exportData} 
           headers={config.csvConfig.headers} 
           filename={config.csvConfig.filename}
           fetchData={onExport}
@@ -68,10 +68,11 @@ const Report = ({ data, config, criteria, onCriteriaChange, exportData, onExport
           selected={selected}
           setSelected={setSelected}
         />
-        <IzDownloadCsv data={exportData} 
+        <DownloadCsv data={exportData} 
           headers={config.csvConfig.headers} 
           filename={config.csvConfig.filename}
           fetchData={onExport}
+          columns={config.columnConfig}
         />
       </Stack>
       )}
@@ -80,9 +81,10 @@ const Report = ({ data, config, criteria, onCriteriaChange, exportData, onExport
         data={data || []}
         columns={tableColumns}
         actions={tableActions}
-        pagination={criteria.pagination}
-        filters={criteria.sort || {}}
+        pagination={criteria?.pagination}
+        filters={criteria?.sort || {}}
         onFilter={handleTableFilter}
+        loading={loading}
       />
     </Stack>
   );

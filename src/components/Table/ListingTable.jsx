@@ -34,6 +34,10 @@ const IzListingTable = ({
   onLoadMore,
   loadingMoreData
 }) => {
+  const pageSizeOptions = [10, 20, 30, 40];
+  const options = pageSizeOptions.includes(pagination?.pageSize)
+    ? pageSizeOptions
+    : [pagination?.pageSize, ...pageSizeOptions];
   const rows = data.map((row, rowIndex) => (
     <TableRow key={rowIndex} sx={{'&:hover .hiddenCell': {opacity: 1}}}>
       {columns.map((column) => (
@@ -43,7 +47,8 @@ const IzListingTable = ({
           className={column.className}
           sx={{
             opacity: column.className === 'hiddenCell' ? 0 : 1,
-            p: '0.5rem',
+            px: '1.25rem',
+            py: '0.75rem',
             width: column.width || 'auto',
             maxWidth: column.width || 'none',
             whiteSpace: column.wrap === false ? 'nowrap' : 'normal',
@@ -55,7 +60,8 @@ const IzListingTable = ({
         </TableCell>
       ))}
       {!!actions && <TableCell  sx={{
-      p: '0.5rem',
+      px: '1.25rem',
+      py: '0.75rem',
       whiteSpace: 'nowrap',
       width: '1%',
       maxWidth: '1%',
@@ -70,7 +76,7 @@ const IzListingTable = ({
         <TableHead sx={config?.stickyHeader && { position: 'sticky', top: 0 }}>
             <TableRow sx={{ backgroundColor: "#F8F9FA"}}>
               {columns.map((column) => (
-                <TableCell key={column.id} sx={{ px: '0.5rem' }}>
+                <TableCell key={column.id} sx={{ px: '1.25rem', py: '0.75rem' }}>
                 <Box display="flex" alignItems="center">
                   {column.sortable ? (
                     <TableSortLabel
@@ -106,7 +112,8 @@ const IzListingTable = ({
               {!!actions && (
                 <TableCell
                   sx={{
-                    p: '0.5rem',
+                    px: '1.25rem',
+                    py: '0.75rem',
                     whiteSpace: 'nowrap',
                     width: '1%',
                     maxWidth: '1%',
@@ -209,16 +216,17 @@ const IzListingTable = ({
             }
             sx={{ padding : 0, minWidth: 50 }}
           >
-            <MenuItem value="10">10</MenuItem>
-            <MenuItem value="20">20</MenuItem>
-            <MenuItem value="30">30</MenuItem>
-            <MenuItem value="40">40</MenuItem>
+            {options.map((size) => (
+              <MenuItem key={size} value={size}>
+                {size}
+              </MenuItem>
+            ))}
           </Select>
         </Stack>
         <Stack>
         <Pagination
           count={pagination.totalPageCount}
-          page={pagination.index}
+          page={pagination.pageIndex}
           onChange={(event, pageIndex) =>
             onFilter({ pageIndex })
           }

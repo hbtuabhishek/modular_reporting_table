@@ -28,7 +28,7 @@ const dateRangePickerStyling = (rangeLabel) => ({
   },
 });
 
-const IzDateRangePickerInput = ({ onClose, onChange, minDate }) => {
+const DateRangePickerInput = ({ onClose, onChange, minDate }) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [rangeLabel, setRangeLabel] = useState("");
@@ -140,4 +140,4 @@ const IzDateRangePickerInput = ({ onClose, onChange, minDate }) => {
   );
 };
 
-export default IzDateRangePickerInput;
+export default DateRangePickerInput;

@@ -35,13 +35,13 @@ const Config = ({ config, criteria, onCriteriaChange, setSelected, selected }) =
       key: "metrics",
       label: "Metrics",
       count: selected.metrics?.length || 0,
-      color: "secondary",
+      color: "primary",
     },
     {
       key: "filters",
       label: "Filters",
       count: Object.keys(selected.filters || {}).length,
-      color: "success",
+      color: "primary",
     },
   ];
 
@@ -218,9 +218,12 @@ const Config = ({ config, criteria, onCriteriaChange, setSelected, selected }) =
             <ListItem
               key={item.value || item.id}
               onClick={() => handleToggle(category, item)}
+              sx={{ padding : "0px"}}
             >
-              <Checkbox checked={checked} />
-              <ListItemText primary={item.label} />
+              <Checkbox checked={checked} size="small"/>
+              <ListItemText primary={item.label} primaryTypographyProps={{
+                fontSize: "0.875rem"
+              }}/>
             </ListItem>
           );
         })}
@@ -256,7 +259,7 @@ const Config = ({ config, criteria, onCriteriaChange, setSelected, selected }) =
         fullWidth
       >
         <DialogTitle>Select {openCategory}</DialogTitle>
-        <DialogContent>
+        <DialogContent dividers>
           <TextField
             fullWidth
             placeholder="Search..."
@@ -281,8 +284,7 @@ const Config = ({ config, criteria, onCriteriaChange, setSelected, selected }) =
             </Box>
           )}
 
-          {openCategory &&
-            renderList(openCategory, config.criteriaView[openCategory])}
+          {openCategory && renderList(openCategory, config.criteriaView[openCategory])}
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenCategory(null)}>Cancel</Button>
