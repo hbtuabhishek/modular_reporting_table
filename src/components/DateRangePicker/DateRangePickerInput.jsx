@@ -1,6 +1,6 @@
 import { Button, Stack } from "@mui/material";
 import { useState } from "react";
-import { DateRangePicker } from "mui-daterange-picker";
+import { DateRangePicker } from "date-range-picker-mui";
 import { startOfDay, endOfDay, subDays, startOfMonth, endOfMonth, subMonths } from "date-fns";
 
 const dateRangePickerStyling = (rangeLabel) => ({
