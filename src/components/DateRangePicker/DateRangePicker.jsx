@@ -8,10 +8,10 @@ import { format } from 'date-fns';
 
 const formatDate = (date) => format(new Date(date), 'MMM d, yyyy');
 
-export default function DateRangePicker({onChange, defaultRangeLabel,minDate,isDisabled}) {
+export default function DateRangePicker({onChange, defaultRangeLabel, minDate, isDisabled, filterItem }) {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const [startDate, setStartDate] = useState(filterItem?.filters?.date?.startDate);
+  const [endDate, setEndDate] = useState(filterItem?.filters?.date?.endDate);
   const [range,setRange] = useState(defaultRangeLabel);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));

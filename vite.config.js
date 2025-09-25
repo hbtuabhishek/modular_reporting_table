@@ -11,11 +11,12 @@ export default defineConfig({
       fileName: (format) => `dynamic-report-listing.${format}.js`,
     },
     rollupOptions: {
-      external: ['react', 'react-dom'],
+      external: ['react', 'react-dom', 'date-range-picker-mui'],
       output: {
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
+          'date-range-picker-mui': 'DateRangePickerMui'
         },
       },
     },

@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback } from "react";
 import Report from "./Report";
 
-const ReportContainer = ({ data = [], config, criteria: initialCriteria, exportData }) => {
+const ReportContainer = ({ data = [], config, criteria: initialCriteria }) => {
   const [criteria, setCriteria] = useState(initialCriteria || {});
 
   const sortConfig = useMemo(() => criteria?.sort, [criteria?.sort]);
@@ -53,7 +53,10 @@ const ReportContainer = ({ data = [], config, criteria: initialCriteria, exportD
     };
   }, [filteredData.length, paginationConfig, criteria?.pagination]);
 
-  const handleExport = useCallback(async () => exportData, [exportData]);
+  const handleExport = useCallback(() => {
+    const csvData = config?.csvConfig?.csvData || [];
+    return csvData;
+  }, [config]);
 
   const handleCriteriaChange = useCallback((newCriteria) => {
     setCriteria((prevCriteria) => {
@@ -92,7 +95,6 @@ const ReportContainer = ({ data = [], config, criteria: initialCriteria, exportD
       config={config}
       criteria={reportCriteria}
       onCriteriaChange={handleCriteriaChange}
-      exportData={exportData}
       onExport={handleExport}
     />
   );
