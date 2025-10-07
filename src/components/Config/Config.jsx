@@ -19,10 +19,19 @@ import {
   Grow,
   IconButton,
   Divider,
-  Tooltip
+  Tooltip,
+  Fade,
 } from "@mui/material";
 import DateRangePicker from "../DateRangePicker/DateRangePicker";
-import { Analytics, BarChart, Clear, Delete, FilterList, Search, ViewColumn } from "@mui/icons-material";
+import { 
+  Analytics, 
+  BarChart, 
+  Clear, 
+  Delete, 
+  FilterList, 
+  Search, 
+  ViewColumn,
+} from "@mui/icons-material";
 
 const getCategoryIcon = (category) => {
   switch (category) {
@@ -39,6 +48,8 @@ const getCategoryIcon = (category) => {
 
 const Config = ({ config, criteria, onCriteriaChange, onFilterChange, filterItem }) => {
   const [openCategory, setOpenCategory] = useState(null);
+
+  console.log("filterItem",filterItem)
   const [search, setSearch] = useState("");
 
   const chipConfigs = [
@@ -115,6 +126,12 @@ const Config = ({ config, criteria, onCriteriaChange, onFilterChange, filterItem
     setOpenCategory(null);
     setSearch("");
   };
+
+  const handleDialogClose = () => {
+    setOpenCategory(null);
+    setSearch("");
+  };
+
   const renderSelectedChips = (category, items) => {
     if (category === "filters") return null;
 
@@ -128,9 +145,11 @@ const Config = ({ config, criteria, onCriteriaChange, onFilterChange, filterItem
           onDelete={() => handleDeleteChip(category, item)}
           size="small"
           color="primary"
+          variant="filled"
           sx={{
             "& .MuiChip-label": {
-              fontSize: "0.80rem",
+              fontSize: "0.8125rem",
+              fontWeight: 500,
             },
           }}
         />
@@ -138,88 +157,145 @@ const Config = ({ config, criteria, onCriteriaChange, onFilterChange, filterItem
     });
   };
 
-  const renderFilterInputs = (items) => {
-    return Object.keys(filterItem.filters)
-      .map((filterId) => {
-        const item = items.find((f) => f.id === filterId);
-        if (!item) return null;
-
-        if (search && !item.label.toLowerCase().includes(search.toLowerCase())) {
-          return null;
-        }
+const renderFilterInputs = (items) => {
+  const selectedItems = Object.keys(filterItem.filters)
+    .map((filterId) => {
+      const item = items.find((f) => f.id === filterId);
+      if (!item) return null;
 
       if (item.type === "textInput") {
         return (
-          <Stack spacing={1} mt={1}>
-            <Typography variant="body1">{item.label || ""}: </Typography>
-            <Stack spacing={1} direction="row" mb={2}>
-              <TextField
-                placeholder="Enter Value"
-                key={item.id}
-                value={filterItem.filters[item.id] || ""}
-                onChange={(e) =>
-                  onFilterChange((prev) => ({
-                    ...prev,
-                    filters: {
-                      ...prev.filters,
-                      [item.id]: e.target.value,
-                    },
-                  }))
-                }
-                size="small"
-                fullWidth
-                sx={{ mb: 2 }}
-                InputProps={{
-                  startAdornment: item.id == "search" && <Search fontSize="small" sx={{ mr: 1 }} />,
-                }}
-              />
-              <Tooltip title="Delete" placement="top">
-                <IconButton variant="outlined" sx={{ textTransform: "none" }} 
-                  onClick={() => handleDeleteChip("filters", item)}><Delete/>
-                </IconButton>
-              </Tooltip>
-            </Stack>
-          </Stack>
+          <Fade in key={item.id}>
+            <Card
+              sx={{
+                p: 2,
+                mb: 2,
+                border: 1,
+                borderColor: "divider",
+                borderRadius: 2,
+              }}
+            >
+              <Stack spacing={1.5}>
+                <Typography variant="subtitle2" fontWeight={600} color="text.primary">
+                  {item.label}
+                </Typography>
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <TextField
+                    placeholder="Enter value..."
+                    value={filterItem.filters[item.id] || ""}
+                    onChange={(e) =>
+                      onFilterChange((prev) => ({
+                        ...prev,
+                        filters: {
+                          ...prev.filters,
+                          [item.id]: e.target.value,
+                        },
+                      }))
+                    }
+                    size="small"
+                    fullWidth
+                    InputProps={{
+                      startAdornment:
+                        item.id === "search" && (
+                          <Search fontSize="small" sx={{ mr: 1, color: "text.secondary" }} />
+                        ),
+                    }}
+                  />
+                  <Tooltip title="Remove filter" placement="top">
+                    <IconButton
+                      onClick={() => handleDeleteChip("filters", item)}
+                      sx={{
+                        border: 1,
+                        borderColor: "divider",
+                      }}
+                    >
+                      <Delete fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </Stack>
+              </Stack>
+            </Card>
+          </Fade>
         );
       }
 
       if (item.type === "daterange") {
         return (
-          <Stack spacing={1} mt={1}>
-          <Typography variant="body1">{item.label || ""}: </Typography>
-            <Stack spacing={1} direction="row">
-            <DateRangePicker
-              onChange={(validRange, label) =>
-                onFilterChange((prev) => ({
-                  ...prev,
-                  filters: {
-                    ...prev.filters,
-                    [item.id]: {
-                      startDate: validRange.startDate,
-                      endDate: validRange.endDate,
-                      label: label,
-                    },
-                  },
-                }))
-              }
-              defaultRangeLabel={filterItem.filters[item.id]?.label || "All Time"}
-              isDisabled={false}
-              filterItem={filterItem}
-            />
-            <Tooltip title="Delete" placement="top">
-              <IconButton variant="outlined" sx={{ textTransform: "none" }} onClick={() => handleDeleteChip("filters", item)}><Delete/></IconButton>
-            </Tooltip>
-          </Stack>
-          </Stack>
+          <Fade in key={item.id}>
+            <Card
+              sx={{
+                p: 2,
+                mb: 2,
+                border: 1,
+                borderColor: "divider",
+                borderRadius: 2,
+              }}
+            >
+              <Stack spacing={1.5}>
+                <Typography variant="subtitle2" fontWeight={600} color="text.primary">
+                  {item.label}
+                </Typography>
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <DateRangePicker
+                    onChange={(validRange, label) =>
+                      onFilterChange((prev) => ({
+                        ...prev,
+                        filters: {
+                          ...prev.filters,
+                          [item.id]: {
+                            startDate: validRange.startDate,
+                            endDate: validRange.endDate,
+                            label: label,
+                          },
+                        },
+                      }))
+                    }
+                    defaultRangeLabel={filterItem.filters[item.id]?.label || "All Time"}
+                    isDisabled={false}
+                    filterItem={filterItem}
+                  />
+                  <Tooltip title="Remove filter" placement="top">
+                    <IconButton
+                      onClick={() => handleDeleteChip("filters", item)}
+                      sx={{
+                        border: 1,
+                        borderColor: "divider",
+                      }}
+                    >
+                      <Delete fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </Stack>
+              </Stack>
+            </Card>
+          </Fade>
         );
       }
 
       return null;
     })
     .filter(Boolean);
-  };
+
+  if (selectedItems.length === 0) return null;
+
+  return (
+    <>
+      <Typography
+        variant="subtitle1"
+        fontWeight={600}
+        sx={{ mb: 2 }}
+      >
+        Selected Filters
+      </Typography>
+      {selectedItems}
+      <Divider sx={{ mx: -3, mb: 2 }} />
+    </>
+  );
+};
+
 
   const renderList = (category, items) => {
+    console.log("items",items)
     const filteredItems = items
       .filter((item) =>
         category === "filters"
@@ -229,21 +305,20 @@ const Config = ({ config, criteria, onCriteriaChange, onFilterChange, filterItem
       .filter((item) =>
         search ? item.label.toLowerCase().includes(search.toLowerCase()) : true
       );
-
+      console.log("filteredItems",filteredItems)
     if (filteredItems.length === 0) {
       return (
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          sx={{ p: 2, textAlign: "center" }}
-        >
-          No {category} available
-        </Typography>
+        <Box sx={{ py: 6, textAlign: "center" }}>
+          <Search sx={{ fontSize: 48, color: "text.disabled", mb: 1 }} />
+          <Typography variant="body2" color="text.secondary">
+            No {category} found
+          </Typography>
+        </Box>
       );
     }
 
     return (
-      <List>
+      <List sx={{ pt: 1 }}>
         {filteredItems.map((item) => {
           const checked =
             category === "filters"
@@ -254,12 +329,32 @@ const Config = ({ config, criteria, onCriteriaChange, onFilterChange, filterItem
             <ListItem
               key={item.value || item.id}
               onClick={() => handleToggle(category, item)}
-              sx={{ cursor:"pointer", gap: 1 }}
+              sx={{
+                cursor: "pointer",
+                gap: 1,
+                borderRadius: 1,
+                mb: 0.5,
+                transition: "all 0.2s",
+                padding: 0,
+                mt: 1
+              }}
             >
-              <Checkbox checked={checked} size="small"/>
-              <ListItemText primary={item.label} primaryTypographyProps={{
-                fontSize: "0.875rem"
-              }}/>
+              <Checkbox
+                checked={checked}
+                size="small"
+                sx={{
+                  "&.Mui-checked": {
+                    color: "primary"
+                  },
+                }}
+              />
+              <ListItemText
+                primary={item.label}
+                primaryTypographyProps={{
+                  fontSize: "0.875rem",
+                  fontWeight: checked ? 500 : 400,
+                }}
+              />
             </ListItem>
           );
         })}
@@ -267,80 +362,99 @@ const Config = ({ config, criteria, onCriteriaChange, onFilterChange, filterItem
     );
   };
 
-  return (
-    <Stack direction="row" spacing={2}>
+  const hasSelections = openCategory && openCategory !== "filters" && (
+    Array.isArray(filterItem[openCategory])
+      ? filterItem[openCategory].length > 0
+      : Object.keys(filterItem[openCategory] || {}).length > 0
+  );
 
-    {chipConfigs.map(({ key, label, count, color }) => (
-      <Badge
-        key={key}
-        badgeContent={count}
-        color={color}
-          sx={{
-            "& .MuiBadge-badge": {
-                right: 4,
-                top: 4,
-                border: "1px solid",
-                fontSize: "0.65rem",
-                minWidth: "20px",
-                height: "20px",
-                padding: "0 4px",
-                lineHeight: "16px",
-            },
-          }}
-      >
-        <Chip
-          icon={getCategoryIcon(key)}
-          label={label}
-          variant="outlined"
-          onClick={() => setOpenCategory(key)}
-          color={color}
-          sx={{
-            px: 1,
-            py: 1,
-            height: 38,
-            fontSize: "0.875rem",
-            fontWeight: 600,
-          }}
-        />
-      </Badge>
-    ))}
+  const shouldShowCard = !(openCategory === "filters" && Object.keys(filterItem.filters || {}).length > 0);
+
+  return (
+    <>
+      <Stack direction="row" spacing={1.5} flexWrap="wrap" useFlexGap>
+        {chipConfigs.map(({ key, label, count, color }) => (
+          <Badge
+            key={key}
+            badgeContent={count}
+            color={color}
+            sx={{
+              "& .MuiBadge-badge": {
+                right: 6,
+                top: 6,
+                border: "2px solid",
+                fontSize: "0.6875rem",
+                fontWeight: 600,
+                minWidth: "22px",
+                height: "22px",
+                padding: "0 5px",
+              },
+            }}
+          >
+            <Chip
+              icon={getCategoryIcon(key)}
+              label={label}
+              variant="outlined"
+              onClick={() => setOpenCategory(key)}
+              color={color}
+              sx={{
+                px: 1.5,
+                py: 2.5,
+                fontSize: "0.875rem",
+                fontWeight: 600,
+                transition: "all 0.2s",
+                boxShadow: 1,
+              }}
+            />
+          </Badge>
+        ))}
+      </Stack>
+
       <Dialog
         open={Boolean(openCategory)}
-        onClose={() => setOpenCategory(null)}
+        onClose={handleDialogClose}
         fullWidth
         maxWidth="sm"
         TransitionComponent={Grow}
-          PaperProps={{
-            sx: {
-              minHeight: 400,
-            },
-          }}
+        PaperProps={{
+          sx: {
+            minHeight: 400,
+          },
+        }}
       >
-        <DialogTitle>Select {openCategory}
-          <TextField
-            fullWidth
-            placeholder={`Search ${openCategory}...`}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            size="small"
-            InputProps={{
-              startAdornment: <Search fontSize="small" sx={{ mr: 1 }} />,
-            }}
-            sx={{ mt: 2, bgcolor:"grey.50" }}
-          />
-            {openCategory && openCategory !== "filters" && (
-              (Array.isArray(filterItem[openCategory])
-                ? filterItem[openCategory].length > 0
-                : Object.keys(filterItem[openCategory] || {}).length > 0) && (
-                <Card
-                  sx={{
-                    mt: 2,
-                    p: 2,
-                    bgcolor: "grey.50",
-                    borderRadius: "4px",
-                    position: "relative",
-                  }}
-                >
+        <DialogTitle sx={{ pb: 2 }}>
+
+          <Stack direction="row" alignItems="center" spacing={1}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: 32,
+                height: 32,
+                borderRadius: 1
+              }}
+            >
+              {getCategoryIcon(openCategory)}
+            </Box>
+            <Typography variant="h6" fontWeight={600}>
+              Select {openCategory}
+            </Typography>
+          </Stack>
+
+          {shouldShowCard && (
+            <Fade in>
+              <Card
+                sx={{
+                  mt: 2,
+                  p: 2,
+                  border: 1,
+                  borderColor: "divider",
+                  borderRadius: 2,
+                  position: "relative"
+                }}
+              >
+                {hasSelections && <Tooltip title="Clear all" placement="top">
                   <IconButton
                     size="small"
                     onClick={() =>
@@ -351,38 +465,75 @@ const Config = ({ config, criteria, onCriteriaChange, onFilterChange, filterItem
                     }
                     sx={{
                       position: "absolute",
-                      top: 3,
-                      right: 3,
+                      top: 8,
+                      right: 8,
+                      boxShadow: 1
                     }}
                   >
                     <Clear fontSize="small" />
                   </IconButton>
+                </Tooltip>}
 
-                  <Stack direction="row" flexWrap="wrap" gap={1}>
-                    {renderSelectedChips(
-                      openCategory,
-                      config.criteriaView[openCategory]
-                    )}
-                  </Stack>
-                </Card>
-              )
-            )}
-            </DialogTitle>
-          <DialogContent>
+                {hasSelections && <Typography variant="caption" fontWeight={600} sx={{ mb: 1, display: "block" }}>
+                  Selected ({openCategory === "filters" ? Object.keys(filterItem[openCategory] || {}).length : filterItem[openCategory]?.length || 0})
+                </Typography> }
+                <Stack direction="row" flexWrap="wrap" gap={1}>
+                  {hasSelections ? (
+                    renderSelectedChips(openCategory, config.criteriaView[openCategory])
+                  ) : (
+                  <Box sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center", 
+                    width: "100%",
+                    minHeight: "3rem",
+                  }}>
+                    <Typography variant="body2" color="text.secondary">{`No ${openCategory} selected`}</Typography>
+                  </Box>)}
+                </Stack>
+              </Card>
+            </Fade>
+          )}
+        {/* <Divider /> */}
+
+
+        </DialogTitle>
+        <DialogContent sx={{ px: 3 }} dividers>
           {openCategory === "filters" && (
             <Box>
               {renderFilterInputs(config.criteriaView[openCategory])}
             </Box>
           )}
+
+          {openCategory && (
+            <TextField
+              fullWidth
+              placeholder={`Search ${openCategory}...`}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              size="small"
+              InputProps={{
+                startAdornment: <Search fontSize="small" />,
+              }}
+            />
+          )}
+
           {openCategory && renderList(openCategory, config.criteriaView[openCategory])}
         </DialogContent>
-        <Divider/>
-        <DialogActions>
-          <Button onClick={() => setOpenCategory(null)}>Cancel</Button>
-          <Button onClick={handleApply} variant="contained">Apply</Button>
+
+
+        {/* <Divider /> */}
+
+        <DialogActions sx={{ px: 3, py: 2 }}>
+          <Button onClick={handleDialogClose} variant="outlined" sx={{ minWidth: 90 }}>
+            Cancel
+          </Button>
+          <Button onClick={handleApply} variant="contained" sx={{ minWidth: 90 }}>
+            Apply
+          </Button>
         </DialogActions>
       </Dialog>
-    </Stack>
+    </>
   );
 };
 

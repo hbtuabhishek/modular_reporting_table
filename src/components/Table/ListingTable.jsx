@@ -8,7 +8,6 @@ import {
   TableRow,
   Paper,
   Button,
-  TablePagination,
   Typography,
   Stack,
   Pagination,
@@ -89,9 +88,7 @@ const IzListingTable = ({
                     >
                       <Typography
                         variant="subtitle1"
-                        sx={{ textTransform: 'capitalize',
-                            display: "inline", fontWeight: 600, fontSize: "0.75rem", lineHeight : 1.75 
-                         }}
+                        sx={{ textTransform: 'capitalize' }}
                       >
                         {column.label}
                       </Typography>
@@ -99,9 +96,7 @@ const IzListingTable = ({
                   ) : (
                     <Typography
                       variant="subtitle1"
-                      sx={{ textTransform: 'capitalize', 
-                          display: "inline", fontWeight: 600, fontSize: "0.75rem", lineHeight : 1.75 
-                      }}
+                      sx={{ textTransform: 'capitalize' }}
                     >
                       {column.label}
                     </Typography>
@@ -120,9 +115,7 @@ const IzListingTable = ({
                   }}>
                   <Typography
                     variant="subtitle1"
-                    sx={{ textTransform: 'capitalize',
-                        display: "inline", fontWeight: 600, fontSize: "0.75rem", lineHeight : 1.75 
-                    }}
+                    sx={{ textTransform: 'capitalize' }}
                   >
                     Action
                   </Typography>
@@ -130,7 +123,7 @@ const IzListingTable = ({
               )}
             </TableRow>
           </TableHead>
-          <TableBody sx={{ padding : "2rem"}}>{rows}</TableBody>
+          <TableBody>{rows}</TableBody>
           <TableFooter sx={config?.stickyFooter && { position: 'sticky', bottom: 0 }}>{footer}</TableFooter>
         </Table>
         <Stack
