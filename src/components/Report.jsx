@@ -56,7 +56,7 @@ const Report = ({ data, config = {}, criteria, onCriteriaChange, onExport }) => 
   return (
     <Stack spacing={2}>
       {CustomHeader ? (
-        <Stack direction={{ xs:"column", sm:"row"}} alignContent='center' mb={2}>
+        <Stack direction={{ xs:"column", sm:"row"}} alignContent='center'>
       <CustomHeader
         config={config}
         criteria={criteria}
