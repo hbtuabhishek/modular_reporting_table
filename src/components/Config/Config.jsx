@@ -48,8 +48,6 @@ const getCategoryIcon = (category) => {
 
 const Config = ({ config, criteria, onCriteriaChange, onFilterChange, filterItem }) => {
   const [openCategory, setOpenCategory] = useState(null);
-
-  console.log("filterItem",filterItem)
   const [search, setSearch] = useState("");
 
   const chipConfigs = [
@@ -57,19 +55,19 @@ const Config = ({ config, criteria, onCriteriaChange, onFilterChange, filterItem
       key: "dimensions",
       label: "Dimensions",
       count: filterItem.dimensions?.length || 0,
-      color: "primary",
+      color: "secondary",
     },
     {
       key: "metrics",
       label: "Metrics",
       count: filterItem.metrics?.length || 0,
-      color: "primary",
+      color: "secondary",
     },
     {
       key: "filters",
       label: "Filters",
       count: Object.keys(filterItem.filters || {}).length,
-      color: "primary",
+      color: "secondary",
     },
   ];
 
@@ -382,12 +380,14 @@ const renderFilterInputs = (items) => {
               "& .MuiBadge-badge": {
                 right: 6,
                 top: 6,
-                border: "2px solid",
+                border: "1px solid lightgrey",
                 fontSize: "0.6875rem",
                 fontWeight: 600,
                 minWidth: "22px",
                 height: "22px",
                 padding: "0 5px",
+                backgroundColor: "#fff",
+                color:"#5b6b79"
               },
             }}
           >
@@ -396,14 +396,17 @@ const renderFilterInputs = (items) => {
               label={label}
               variant="outlined"
               onClick={() => setOpenCategory(key)}
-              color={color}
+              // color={color}
               sx={{
-                px: 1.5,
-                py: 2.5,
+                p: "18px",
                 fontSize: "0.875rem",
                 fontWeight: 600,
                 transition: "all 0.2s",
-                boxShadow: 1,
+                color: "#5b6b79",
+                border: "1px solid lightgrey",
+                "& .MuiChip-icon": {
+                  color: "#5b6b79",
+                },
               }}
             />
           </Badge>

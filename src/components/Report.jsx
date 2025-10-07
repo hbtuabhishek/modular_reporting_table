@@ -61,11 +61,12 @@ const Report = ({ data, config = {}, criteria, onCriteriaChange, onExport }) => 
         config={config}
         criteria={criteria}
         onCriteriaChange={onCriteriaChange}
+        props={headerConfig?.customProp}
       />
         {CsvExport}
         </Stack>
       ) : (
-      <Stack direction="row" spacing={2} justifyContent="flex-end">
+      <Stack direction="row" spacing={2} justifyContent="flex-end" alignItems='center'>
         <Config
           config={config}
           criteria={criteria}
