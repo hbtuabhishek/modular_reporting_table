@@ -54,19 +54,19 @@ const Config = ({ config, criteria, onCriteriaChange, onFilterChange, filterItem
     {
       key: "dimensions",
       label: "Dimensions",
-      count: filterItem.dimensions?.length || 0,
+      count: criteria.dimensions?.length || 0,
       color: "secondary",
     },
     {
       key: "metrics",
       label: "Metrics",
-      count: filterItem.metrics?.length || 0,
+      count: criteria.metrics?.length || 0,
       color: "secondary",
     },
     {
       key: "filters",
       label: "Filters",
-      count: Object.keys(filterItem.filters || {}).length,
+      count: Object.keys(criteria.filters || {}).length,
       color: "secondary",
     },
   ];
