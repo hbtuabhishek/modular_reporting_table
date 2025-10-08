@@ -67,6 +67,7 @@ const Report = ({ data, config = {}, criteria, onCriteriaChange, onExport }) => 
         </Stack>
       ) : (
       <Stack direction="row" spacing={2} justifyContent="flex-end" alignItems='center'>
+        <Stack sx={{ pr: "1rem", borderRight: ".0625rem solid #DADCE0" }}>
         <Config
           config={config}
           criteria={criteria}
@@ -74,6 +75,7 @@ const Report = ({ data, config = {}, criteria, onCriteriaChange, onExport }) => 
           filterItem={filterItem}
           onFilterChange={setFilterItem}
         />
+        </Stack>
         {CsvExport}
       </Stack>
       )}
